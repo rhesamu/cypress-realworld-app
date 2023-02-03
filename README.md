@@ -36,9 +36,9 @@ A payment application to demonstrate <strong>real-world</strong> usage of <a hre
 
 > 💬 **Note from maintainers**
 >
-> This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledge production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
+> This application is purely for demonstration and educational purposes. Its setup and configuration resemble typical real-world applications, but it's not a full-fledged production system. Use this app to learn, experiment, tinker, and practice application testing with Cypress.
 >
-> Happy Testing
+> Happy Testing!
 
 ---
 
@@ -74,6 +74,12 @@ TypeScript will be added as a local dependency to the project, so no need to ins
 yarn install
 ```
 
+#### Mac M1 chip users will need to prepend `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true`.
+
+```shell
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn install
+```
+
 ### Run the app
 
 ```shell
@@ -83,8 +89,8 @@ yarn dev
 > 🚩 **Note**
 >
 > The app will run on port `3000` (frontend) and `3001` (API backend) by default. Please make sure there are no other applications or services running on both ports.
-> If you want to change the default ports, you can do so by modifying `REACT_APP_PORT` and `REACT_APP_BACKEND_PORT` variables in `.env` file.
-> However, make sure the modified port numbers in `.env` are not commited into Git since the CI environments still expect the application run on default ports.
+> If you want to change the default ports, you can do so by modifying `PORT` and `REACT_APP_BACKEND_PORT` variables in `.env` file.
+> However, make sure the modified port numbers in `.env` are not committed into Git since the CI environments still expect the application to run on the default ports.
 
 ### Start Cypress
 
@@ -96,8 +102,8 @@ yarn cypress:open
 >
 > If you have changed the default ports, then you need to update Cypress configuration file (`cypress.json`) locally.
 > There are three properties that you need to update in `cypress.json`: `baseUrl`, `apiUrl`, and `url`.
-> The port number in `baseUrl` corresponds to `REACT_APP_PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `REACT_APP_BACKEND_PORT`.
-> For example, if you have changed `REACT_APP_PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
+> The port number in `baseUrl` corresponds to `PORT` variable in `.env` file. Similarly, the port number in `apiUrl` and `url` correspond to `REACT_APP_BACKEND_PORT`.
+> For example, if you have changed `PORT` to `13000` and `REACT_APP_BACKEND_PORT` to `13001` in `.env` file, then your `cypress.json` should look similar to the following snippet:
 >
 > ```json
 > {
@@ -114,7 +120,7 @@ yarn cypress:open
 > }
 > ```
 >
-> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application run on default ports.
+> Avoid committing the modified `cypress.json` into Git since the CI environments still expect the application to be run on default ports.
 
 ## Tests
 
@@ -126,7 +132,7 @@ yarn cypress:open
 
 ## Database
 
-- The local JSON database located in [data/database.json](./data/database.json) and is managed with [lowdb].
+- The local JSON database is located in [data/database.json](./data/database.json) and is managed with [lowdb].
 
 - The database is [reseeded](./data/database-seed.json) each time the application is started (via `yarn dev`). Database seeding is done in between each [Cypress End-to-End test](./cypress/tests).
 
@@ -169,13 +175,13 @@ Support for 3rd party authentication is available in the application to demonstr
 
 ### Auth0
 
-A [guide has been written with detail around adapting the RWA](http://on.cypress.io/auth0) to use [Auth0][auth0] and to explain the programmatic command used for Cypress tests.
+The [Auth0](https://auth0.com/) tests have been rewritten to take advantage of our (currently experimental) [`cy.session`](https://docs.cypress.io/api/commands/session) and [`cy.origin`](https://docs.cypress.io/api/commands/origin) commands.
 
-Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env).
+Prerequisites include an Auth0 account and a Tenant configured for use with a SPA. Environment variables from Auth0 are to be placed in the [.env](./.env). For more details see [Auth0 Application Setup](http://on.cypress.io/auth0#Auth0-Application-Setup) and [Setting Auth0 app credentials in Cypress](http://on.cypress.io/auth0#Setting-Auth0-app-credentials-in-Cypress).
 
 Start the application with `yarn dev:auth0` and run Cypress with `yarn cypress:open`.
 
-The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail.
+The only passing spec on this branch will be the [auth0 spec](./cypress/tests/ui-auth-providers/auth0.spec.ts); all others will fail. Please note that your test user will need to authorize your Auth0 app before the tests will pass.
 
 ### Okta
 
